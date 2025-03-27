@@ -25,7 +25,7 @@ def predict(X: np.ndarray, weights: np.ndarray) -> np.ndarray:
     :param weights: Vetor de pesos
     :return: Vetor de predições
     """
-    X_bias = ...    # SEU CÓDIGO AQUI
+    X_bias = ...  # SEU CÓDIGO AQUI
     return activation_function(X_bias @ weights)
 
 
@@ -39,7 +39,12 @@ def mean_squared_error(y_true: np.ndarray, y_pred: np.ndarray) -> float:
     return  # SEU CÓDIGO AQUI
 
 
-def update_weights(X: np.ndarray, y: np.ndarray, weights: np.ndarray, lr: float) -> np.ndarray:
+# ----------------------------------------------------
+
+
+def update_weights(
+    X: np.ndarray, y: np.ndarray, weights: np.ndarray, lr: float
+) -> np.ndarray:
     """
     Atualiza os pesos do modelo usando o gradiente da MSE.
     :param X: Matriz de entrada (amostras x features)
@@ -50,11 +55,13 @@ def update_weights(X: np.ndarray, y: np.ndarray, weights: np.ndarray, lr: float)
     """
     X_bias = np.c_[np.ones(X.shape[0]), X]
     y_pred = predict(X, weights)
-    gradient = ... # SEU CÓDIGO AQUI
+    gradient = ...  # SEU CÓDIGO AQUI
     return weights - lr * gradient
 
 
-def train(X: np.ndarray, y: np.ndarray, epochs: int = 100, lr: float = 0.01) -> np.ndarray:
+def train(
+    X: np.ndarray, y: np.ndarray, epochs: int = 100, lr: float = 0.01
+) -> np.ndarray:
     """
     Treina o modelo AdaLine por um número de épocas usando o gradiente descendente.
     :param X: Matriz de entrada (amostras x features)
@@ -65,5 +72,5 @@ def train(X: np.ndarray, y: np.ndarray, epochs: int = 100, lr: float = 0.01) -> 
     """
     weights = initialize_weights(X.shape[1])
     for _ in range(epochs):
-        weights = ...   # SEU CÓDIGO AQUI
+        weights = ...  # SEU CÓDIGO AQUI
     return weights

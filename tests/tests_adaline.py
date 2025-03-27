@@ -1,5 +1,8 @@
 import unittest
-from main import *
+
+import numpy as np
+
+from adaline.adaline import *
 
 
 class TestAdaLine(unittest.TestCase):
@@ -37,5 +40,5 @@ class TestAdaLine(unittest.TestCase):
         self.assertEqual(weights.shape, (X.shape[1] + 1,))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

@@ -1,5 +1,4 @@
 import numpy as np
-import pytest
 
 
 def activation_function(x: np.ndarray) -> np.ndarray:
