@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from adaline.adaline import *
+from adaline.adaline_np import *
 
 
 class TestAdaLine(unittest.TestCase):

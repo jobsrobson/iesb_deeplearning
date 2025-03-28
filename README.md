@@ -162,3 +162,6 @@ B = torch.tensor([10, 20])
 
 print(A + B)  # B é "expandido" automaticamente
 ```
+
+
+---
