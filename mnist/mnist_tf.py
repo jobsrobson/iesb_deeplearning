@@ -8,6 +8,10 @@ from tensorflow.keras.utils import to_categorical
 
 
 def train_and_log_tf(params):
+    """
+
+    :type params: Dict
+    """
     # Habilita o autolog do MLflow com TensorFlow
     mlflow.tensorflow.autolog()
 
