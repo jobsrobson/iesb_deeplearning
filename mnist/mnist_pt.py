@@ -75,6 +75,8 @@ def train_and_log_step(params: Dict):
         shuffle=True,
     )
 
+    # Configuração do dispositivo (GPU ou CPU)
+    # Verifica se há GPU disponível e, se sim, usa-a; caso contrário, usa a CPU.
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(device)
     model = Net().to(device)
@@ -84,25 +86,39 @@ def train_and_log_step(params: Dict):
     with mlflow.start_run(run_name='mnist_train'):
         mlflow.log_params(params)
 
+        # Treinamento do modelo, através de um loop que itera sobre as épocas e os lotes de dados.
         for epoch in range(epochs):
             model.train()
             running_loss: float = 0.0
             for x_batch, y_batch in train_loader:
                 x_batch, y_batch = x_batch.to(device), y_batch.to(device)
                 optimizer.zero_grad()
+                # Logits são as saídas da rede neural antes de aplicar a função de ativação softmax (padrão do PyTorch).
                 logits = model(x_batch)
+                # Calcula a Loss (perda) entre as previsões do modelo e os rótulos reais.
+                # A função de perda CrossEntropyLoss é utilizada para calcular a diferença entre as previsões e os rótulos.
                 loss: CrossEntropyLoss = criterion(logits, y_batch)
+                # Faz backpropagation para calcular os gradientes.
+                # O otimizador atualiza os pesos do modelo com base nos gradientes calculados.
                 loss.backward()
+                # O otimizador aplica os gradientes calculados para atualizar os pesos do modelo.
                 optimizer.step()
+                # A perda média é acumulada para calcular a perda total do lote.
                 running_loss += loss.item()
 
+            # Calcula a perda média para a época atual
             avg_loss = running_loss / len(train_loader)
             print(f'Epoch [{epoch+1}], Loss: {avg_loss:.4f}')
 
+        # Model.eval() coloca o modelo em modo de avaliação, desativando o dropout e a normalização em lote.
         model.eval()
+
+        # Zeramos as variáveis para calcular a acurácia e a perda média no conjunto de teste
         correct = 0
         total = 0
         test_loss = 0.0
+
+        # Avaliação do modelo no conjunto de teste
         with torch.no_grad():
             for x_batch, y_batch in test_loader:
                 x_batch, y_batch = x_batch.to(device), y_batch.to(device)
@@ -113,21 +129,30 @@ def train_and_log_step(params: Dict):
                 correct += (preds == y_batch).sum().item()
                 total += y_batch.size(0)
 
+        # Calcula a acurácia e a perda média no conjunto de teste
         test_acc = correct / total
         avg_test_loss = test_loss / len(test_loader)
         mlflow.log_metric("test_loss", avg_test_loss)
         mlflow.log_metric("test_accuracy", test_acc)
         print(f"Test Loss: {avg_test_loss:.4f}, Accuracy: {test_acc:.4f}")
 
-        # Log do modelo
+        # Log do modelo no MLflow
         mlflow.pytorch.log_model(model, "model")
 
-
+# Parâmetros de configuração
+# Define os parâmetros de configuração do modelo, como o tamanho do lote (batch size),
+# a taxa de aprendizado (learning rate) e o número de épocas (epochs).
 params = {
     "batch_size": 64,
     "learning_rate": 0.01,
     "epochs": 5
 }
 
+
+# O bloco if __name__ == "__main__": é utilizado para garantir que o código dentro dele
+# seja executado apenas quando o script é executado diretamente, e não quando é importado como um módulo.
+# Isso é útil para evitar a execução de código indesejado quando o script é importado em outro lugar.
+# Dentro desse bloco, chamamos a função train_and_log_step com os parâmetros definidos acima.
+# Isso inicia o treinamento do modelo e registra os resultados no MLflow.
 if __name__ == "__main__":
     train_and_log_step(params)

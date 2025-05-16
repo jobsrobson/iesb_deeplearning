@@ -1,0 +1,15 @@
+artifact_uri: file:///workspaces/iesb_deeplearning/mlruns/0/22c9bd057b4f4f0f89dd68d9432a8259/artifacts
+end_time: 1747398438970
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 22c9bd057b4f4f0f89dd68d9432a8259
+run_name: mnist_train
+run_uuid: 22c9bd057b4f4f0f89dd68d9432a8259
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747398391416
+status: 3
+tags: []
+user_id: codespace
